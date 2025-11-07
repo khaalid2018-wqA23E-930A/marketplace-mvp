@@ -1,0 +1,24 @@
+node_modules
+.vercel
+
+# Local env files
+.env
+.env.local
+
+# Next.js build output
+.next
+
+# PostCSS/Tailwind build output
+dist
+
+# VS Code workspace
+.vscode/
+
+# Lock files
+package-lock.json
+
+# OS files
+.DS_Store
+
+# Logs
+npm-debug.log*
