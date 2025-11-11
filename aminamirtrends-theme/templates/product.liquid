@@ -1,0 +1,17 @@
+{% comment %} Minimal product template {% endcomment %}
+<div class="container product-page">
+  <h1>{{ product.title }}</h1>
+  <div class="product-grid">
+    <div class="product-media">
+      <img src="{{ product.featured_image | img_url: 'master' }}" alt="{{ product.title }}">
+    </div>
+    <div class="product-info">
+      <div class="price">{{ product.price | money }}</div>
+      <div class="description">{{ product.description }}</div>
+      <form method="post" action="/cart/add">
+        <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+        <button type="submit" class="btn">Add to cart</button>
+      </form>
+    </div>
+  </div>
+</div>

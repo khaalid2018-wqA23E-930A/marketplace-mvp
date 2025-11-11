@@ -1,8 +1,6 @@
 // src/pages/api/checkout.js
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
 export default async function handler(req, res) {
     if (req.method !== "POST") {
         res.setHeader("Allow", ["POST"]);
@@ -15,8 +13,17 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: "Missing lineItems" });
         }
 
-        const siteUrl =
-            process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+        // If STRIPE secret key is not set, behave in mock mode and return a local success URL
+        if (!process.env.STRIPE_SECRET_KEY) {
+            // Create a simple mock redirect URL that includes basic info for debugging
+            const mockId = Date.now();
+            const params = new URLSearchParams({ mock: "1", id: String(mockId) });
+            return res.status(200).json({ url: `${siteUrl}/success?${params.toString()}` });
+        }
+
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
         const session = await stripe.checkout.sessions.create({
             mode: "payment",

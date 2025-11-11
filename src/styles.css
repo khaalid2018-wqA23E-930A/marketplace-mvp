@@ -1,0 +1,30 @@
+/* src/styles.css
+   This file intentionally pulls in the built Tailwind output if present
+   and provides a small fallback so the app has basic styles while
+   development or before Tailwind is configured. */
+
+@import url('../dist/styles.css');
+
+html,
+body,
+#__next {
+    height: 100%;
+}
+
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    margin: 0;
+    background: #fff;
+    color: #111827;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 1rem;
+}

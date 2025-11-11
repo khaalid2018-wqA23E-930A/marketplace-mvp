@@ -1,0 +1,13 @@
+[
+    {
+        "name": "Theme settings",
+        "settings": [
+            {
+                "type": "text",
+                "id": "announcement_text",
+                "label": "Announcement text",
+                "default": "Free shipping over $50"
+            }
+        ]
+    }
+]

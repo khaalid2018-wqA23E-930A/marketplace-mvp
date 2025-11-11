@@ -1,96 +1,48 @@
-import Head from 'next/head';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import ProductCard from '../components/ProductCard';
-
-const featured = [
-    {
-        id: 1,
-        title: 'Minimal Tee — Black',
-        price: 24.99,
-        image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop',
-        description: 'Classic everyday tee. Soft cotton, unisex sizing.',
-    },
-    {
-        id: 2,
-        title: 'Signature Perfume',
-        price: 59.99,
-        image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=1200&auto=format&fit=crop',
-        description: 'Long-lasting fragrance with warm notes.',
-    },
-    {
-        id: 3,
-        title: 'Elegant Watch — Gold',
-        price: 89.0,
-        image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?q=80&w=1200&auto=format&fit=crop',
-        description: 'Stainless steel case, water resistant.',
-    },
-];
+import React, { useState } from "react";
 
 export default function Home() {
+    const [input, setInput] = useState("");
+    const [response, setResponse] = useState("");
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setResponse("Thinking... 🤔");
+        try {
+            const res = await fetch("/api/gateway", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: input }),
+            });
+            const data = await res.json();
+            setResponse(data.reply || "No response from AI 🤖");
+        } catch (err) {
+            setResponse("Error connecting to AI Gateway ❌");
+        }
+    };
+
     return (
-        <>
-            <Head>
-                <title>AminTrends — Marketplace</title>
-                <meta name="description" content="Buy & sell items with our community." />
-            </Head>
+        <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center text-center p-6">
+            <h1 className="text-4xl font-bold mb-3 text-gray-900">🛍️ AminTrends Marketplace</h1>
+            <p className="text-gray-600 mb-8">Ask anything about our products below 👇</p>
 
-            <Navbar />
+            <form onSubmit={handleSubmit} className="w-full max-w-md">
+                <input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Type your question..."
+                    className="w-full p-3 rounded border border-gray-300 focus:outline-none"
+                />
+                <button
+                    type="submit"
+                    className="mt-3 w-full bg-black text-white p-3 rounded hover:bg-gray-800 transition"
+                >
+                    Ask AI
+                </button>
+            </form>
 
-            {/* HERO */}
-            <section className="bg-gradient-to-b from-white to-blue-50">
-                <div className="mx-auto max-w-6xl px-4 py-16 grid md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-                            Welcome to <span className="text-blue-600">AminTrends</span>
-                        </h1>
-                        <p className="mt-4 text-gray-600">
-                            Buy and sell items with our community. Launch your first listing in minutes.
-                        </p>
-                        <div className="mt-6 flex gap-3">
-                            <a
-                                href="/CreateListing"
-                                className="rounded-md px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700"
-                            >
-                                Sell an Item
-                            </a>
-                            <a
-                                href="/ProductList"
-                                className="rounded-md px-4 py-2 border font-medium hover:bg-white"
-                            >
-                                Browse Products
-                            </a>
-                        </div>
-                    </div>
-
-                    <div className="aspect-video rounded-xl border bg-white/60 backdrop-blur-sm overflow-hidden">
-                        <img
-                            src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1600&auto=format&fit=crop"
-                            alt="Marketplace hero"
-                            className="w-full h-full object-cover"
-                            loading="eager"
-                        />
-                    </div>
-                </div>
-            </section>
-
-            {/* FEATURED */}
-            <section className="mx-auto max-w-6xl px-4 py-12">
-                <div className="flex items-end justify-between">
-                    <h2 className="text-2xl font-bold">Featured Products</h2>
-                    <a href="/ProductList" className="text-sm text-blue-600 hover:underline">
-                        View all →
-                    </a>
-                </div>
-
-                <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {featured.map((p) => (
-                        <ProductCard key={p.id} product={p} />
-                    ))}
-                </div>
-            </section>
-
-            <Footer />
-        </>
+            <div className="mt-8 text-left bg-white p-4 rounded shadow max-w-md w-full">
+                <p className="text-gray-700 whitespace-pre-wrap">{response}</p>
+            </div>
+        </main>
     );
 }

@@ -1,21 +1,23 @@
+// src/pages/api/gateway.js
 export default async function handler(req, res) {
     try {
+        const { message } = req.body;
+
         const r = await fetch(`${process.env.OPENAI_BASE_URL}/chat/completions`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
             },
             body: JSON.stringify({
-                model: "gpt-5",
-                messages: [{ role: "user", content: "Hello AI Gateway!" }]
-            })
+                model: "gpt-4-turbo",
+                messages: [{ role: "user", content: message || "Hello!" }],
+            }),
         });
 
-        if (!r.ok) throw new Error(`Upstream error: ${r.status}`);
         const data = await r.json();
-        res.status(200).json({ ok: true, reply: data });
+        res.status(200).json({ reply: data.choices?.[0]?.message?.content || "No response" });
     } catch (err) {
-        res.status(500).json({ ok: false, error: String(err) });
+        res.status(500).json({ error: "Gateway request failed" });
     }
 }

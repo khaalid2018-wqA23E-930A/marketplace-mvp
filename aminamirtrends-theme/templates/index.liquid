@@ -1,0 +1,13 @@
+{% comment %} Minimal homepage template {% endcomment %}
+{% section 'hero' %}
+
+<div class="container">
+  <h1>Welcome to AminAmir Trends</h1>
+  <p>Featured products</p>
+
+  <div class="grid">
+    {% for product in collections.frontpage.products limit:8 %}
+      {% include 'product-card' with product %}
+    {% endfor %}
+  </div>
+</div>

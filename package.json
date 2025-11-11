@@ -10,9 +10,10 @@
         "build:css": "node ./scripts/build-css.js"
     },
     "dependencies": {
-        "next": "14.1.0",
-        "react": "18.2.0",
-        "react-dom": "18.2.0",
+        "@stripe/stripe-js": "^8.3.0",
+        "next": "^14.1.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
         "stripe": "^19.3.0"
     },
     "devDependencies": {
